@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: onMap
+  description: Service for creating and tracking orders
+  version: 1.0.0
+components:
+  schemas:
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          format: phone
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+  responses:
+    User:
+      description: "refresh_token"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              refresh_token:
+                type: string
+          example:
+            refresh_token: "123"
+servers:
+  - url: 'https://api.server.test/v1'
+tags:
+  - name: "auth"
+    description: "User registration and authorization"
+paths:
+  /register:
+    post:
+      tags:
+        - "auth"
+      description: "Registration"
+      requestBody:
+        description: "User registration info"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /refresh:
+    post:
+      tags:
+        - "auth"
+      description: "refresh token"
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+  /login:
+    post:
+      tags:
+        - "auth"
+      description: "Login"
+      requestBody:
+        description: "User credentials"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+            example:
+              username: "petya"
+              password: "12345"
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+
